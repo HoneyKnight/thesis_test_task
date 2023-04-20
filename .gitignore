@@ -5,6 +5,8 @@ __pycache__/
 
 # C extensions
 *.so
+/app/employees/photos/
+app/employees/photos/
 employees/photos/
 /employees/photos/
 # Distribution / packaging
