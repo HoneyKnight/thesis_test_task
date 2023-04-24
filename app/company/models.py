@@ -52,3 +52,26 @@ class Employee(models.Model):
             f'{self.last_name} {self.first_name}'
             f'{self.patronymic} | {self.position}'
         )
+
+
+class Projects(models.Model):
+    name = models.CharField('Название проекта', max_length=255)
+    director = models.ForeignKey(
+        Employee,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='managed_projects'
+    )
+    employees = models.ManyToManyField(
+        Employee,
+        'Сотрудники',
+        # related_name='managed_employees',
+    )
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
+
+    def __str__(self) -> str:
+        return self.name

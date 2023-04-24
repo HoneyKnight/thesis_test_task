@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Department, Employee
+from .models import Department, Employee, Projects
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -33,3 +34,28 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'age',
             'department',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Employee.objects.all(),
+                fields=['first_name', 'last_name'],
+                message='Такой сотрудник уже есть'
+            )
+        ]
+
+
+class ProjectsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = (
+            'id',
+            'name',
+        )
+
+
+class ProjectsRetrieveSerializer(serializers.ModelSerializer):
+    director = EmployeeSerializer()
+    employees = EmployeeSerializer(many=True)
+
+    class Meta:
+        model = Projects
+        fields = '__all__'

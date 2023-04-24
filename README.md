@@ -33,7 +33,7 @@ DB_PORT=5432
 
 #### Сборка контейнеров
 ```
-cd foodgram-project-react/infra/
+cd app/infra/
 docker-compose up -d --build
 docker-compose exec app python manage.py migrate
 docker-compose exec app python manage.py collectstatic --no-input

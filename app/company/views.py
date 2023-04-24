@@ -2,20 +2,29 @@ from django.db.models import Count, Sum
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin)
+                                   ListModelMixin, RetrieveModelMixin)
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from .models import Department, Employee
-from .serializers import DepartmentSerializer, EmployeeSerializer
+from .models import Department, Employee, Projects
+from .serializers import (DepartmentSerializer, EmployeeSerializer,
+                          ProjectsListSerializer, ProjectsRetrieveSerializer)
 
 
 class CreateRetrieveDestroyViewSet(
     ListModelMixin,
     DestroyModelMixin,
     CreateModelMixin,
-    GenericViewSet
+    GenericViewSet,
+):
+    pass
+
+
+class ListRetrieveViewSet(
+    ListModelMixin,
+    RetrieveModelMixin,
+    GenericViewSet,
 ):
     pass
 
@@ -36,3 +45,12 @@ class EmployeeViewSet(CreateRetrieveDestroyViewSet):
     search_fields = ['last_name', 'department__id']
     permission_classes = [IsAuthenticated]
     pagination_class = LimitOffsetPagination
+
+
+class ProjectsViewSet(ListRetrieveViewSet):
+    queryset = Projects.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProjectsListSerializer
+        return ProjectsRetrieveSerializer
