@@ -66,7 +66,6 @@ class Projects(models.Model):
     employees = models.ManyToManyField(
         Employee,
         'Сотрудники',
-        # related_name='managed_employees',
     )
 
     class Meta:
